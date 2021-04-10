@@ -15,6 +15,9 @@ a = 1
 
 all: psort usort
 
+tes: tes.c merge.a 
+	$(CC) -o $@ $^ $(CFLAGS) merge.a 2>&1 | tee tes.out
+
 psort: psort.c merge.a
 	$(CC) -o $@ $^ $(CFLAGS) -lrt merge.a 2>&1 | tee pmake.out
 
