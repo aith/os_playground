@@ -84,7 +84,6 @@ do
   else 
     ssecs=`tail -3 sort.out | head -1 | tr "m" "\n" | tail -1 | sed 's/.$//'`
     (time ./$sort -m $cnt) &> sort.out
-    (valgrind --leak-check=full --show-reachable=yes -v ./$sort -m $cnt) &> speedup.out
     pass=`grep PASS sort.out | wc -l`
     if (( pass < 1 ))
     then
