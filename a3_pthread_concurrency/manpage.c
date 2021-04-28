@@ -8,7 +8,6 @@
  *
  ***********************************************************************/
 
-#include "manpage.h"
 
 /*
  * Create a thread for each of seven manpage paragraphs and have them synchronize
@@ -40,8 +39,41 @@ A semaphore S has the following properties:
  *
  * As supplied, shows random single messages.
  */
-void manpage() 
-{
-  int pid = getParagraphId(); // pid = 'Paragraph Id"
-  showParagraph();
+
+#include "manpage.h"
+#include <pthread.h>
+#include <stdio.h>
+
+#define NUM_PARAGRAPHS 7
+
+pthread_mutex_t lock;
+pthread_t threads[NUM_PARAGRAPHS];
+pthread_cond_t condvars[NUM_PARAGRAPHS];
+
+void *thread_build_paragraph(void* argp);
+
+void manpage() {
+    /* init types */
+    pthread_mutex_init(&lock, NULL);
+
+    for (int i = 0; i < NUM_PARAGRAPHS; i++) {
+        pthread_cond_init(&condvars[i], NULL);
+    }
+
+    /* Create and run threads */
+    for (int i = 0; i < NUM_PARAGRAPHS; i++) {
+        pthread_create(&threads[i], NULL, thread_build_paragraph, NULL);
+    }
+
+    /* Wait for threads to finish */
+    for(int i = 0; i < NUM_PARAGRAPHS; i++){
+        pthread_join(threads[i], NULL);
+    }
+
+    return;
 }
+
+void *thread_build_paragraph(void* argp) {
+    return 0;
+}
+

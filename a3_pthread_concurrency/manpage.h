@@ -7,6 +7,7 @@
  *
  ***********************************************************************/
 
+/* These are supplied to you*/
 /*
  * Returns paragraph identifier in the range 0..6 for the current thread
  */
