@@ -8,14 +8,14 @@
 
 #define DEF_JUNCS 7
 #define DEF_TRACKS 7
-#define MAX_CARTS 99
+#define MAX_CARTS 300
 
-void *memset(void *str, int c, size_t n);
+/* void *memset(void *str, int c, size_t n); */
 
 int N_JUNCS = DEF_JUNCS;
 int N_TRACKS = DEF_TRACKS;
-sem_t *junc_locks;
-int *track_taken_flags;
+sem_t junc_locks[17];
+int track_taken_flags[17];
 
 struct Cart {
   unsigned int cart;
@@ -82,6 +82,7 @@ void arrive(unsigned int cart, enum track track, enum junction junction) {
   struct Cart args = {cart, track, junction};
   carts[cart] = args;
   pthread_create(&t, NULL, &thread_arrive, (void *)&carts[cart]);
+  /* pthread_join(t, NULL); */
 }
 
 /*
@@ -94,8 +95,8 @@ void arrive(unsigned int cart, enum track track, enum junction junction) {
 void cartman(unsigned int tracks) {
   N_TRACKS = tracks;
   N_JUNCS = tracks;
-  junc_locks = (sem_t *)malloc(N_JUNCS * sizeof(sem_t));
-  track_taken_flags = (int *)malloc(N_TRACKS * sizeof(int));
+  /* junc_locks = (sem_t *)malloc(N_JUNCS * sizeof(sem_t)); */
+  /* track_taken_flags = (int *)malloc(N_TRACKS * sizeof(int)); */
   printf("%d\n", N_TRACKS);
   for (int i = 0; i < N_JUNCS; i++) {
     sem_init(&junc_locks[i], 0, 1);
