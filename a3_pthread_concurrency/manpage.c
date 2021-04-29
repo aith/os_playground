@@ -67,10 +67,12 @@ void manpage() {
   for (int i = 0; i < NUM_PARAGRAPHS; i++) {
     pthread_join(threads[i], NULL);
   }
+  /* printf("Done!\n"); */
 
   return;
 }
 
+/* The function that each thread runs */
 void *thread_build_paragraph(void *argp) {
   int tid = getParagraphId();
   pthread_mutex_lock(&condvar_lock); /* Protects the condvar */

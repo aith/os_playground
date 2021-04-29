@@ -22,8 +22,9 @@ enum junction { A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q };
  * 
  *   1. CART is not known to the system
  *   2. JUNCTION is not reserved by CART
- *   3. CART is not currently at JUNCTION 
- *   4. CART is no longer active having already crossed 
+ *   3. Junction opposite JUNCTION is not reserved by CART
+ *   4. CART is not currently at JUNCTION 
+ *   5. CART is no longer active having already crossed 
  */
 void cross(unsigned int cart, enum track track, enum junction junction); 
 
