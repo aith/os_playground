@@ -97,7 +97,6 @@ void cartman(unsigned int tracks) {
   N_JUNCS = tracks;
   /* junc_locks = (sem_t *)malloc(N_JUNCS * sizeof(sem_t)); */
   /* track_taken_flags = (int *)malloc(N_TRACKS * sizeof(int)); */
-  printf("%d\n", N_TRACKS);
   for (int i = 0; i < N_JUNCS; i++) {
     sem_init(&junc_locks[i], 0, 1);
   }

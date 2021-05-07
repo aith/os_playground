@@ -1,0 +1,24 @@
+15
+** Random Test (15 tracks) **
+CART  0 on Brown   track between junctions K and J
+CART  2 on Blue    track between junctions F and E
+CART 20 on Mauve   track between junctions N and O
+CART  3 on Violet  track between junctions H and G
+CART  1 on Gray    track between junctions M and L
+CART 10 on Orange  track between junctions B and C
+CART  5 on Brown   track between junctions J and K
+CART 13 on Blue    track between junctions F and E
+CART 21 on Red     track between junctions A and B
+CART 12 on Yellow  track between junctions D and C
+CART 15 on Azure   track between junctions I and H
+CART  7 on Magenta track between junctions M and N
+CART 19 on Cyan    track between junctions K and L
+CART 22 on Red     track between junctions A and B
+CART  4 on Azure   track between junctions H and I
+CART 23 on Yellow  track between junctions C and D
+CART  6 on Cyan    track between junctions K and L
+CART  9 on Black   track between junctions J and I
+CART 11 on Green   track between junctions D and E
+CART 18 on Black   track between junctions I and J
+CART 16 on Green   track between junctions D and E
+FAIL Timeout after 18.00 seconds

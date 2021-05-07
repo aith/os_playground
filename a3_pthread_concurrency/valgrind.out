@@ -1,0 +1,40 @@
+==19835== Memcheck, a memory error detector
+==19835== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==19835== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==19835== Command: ./manpage
+==19835== 
+==19835== 
+==19835== HEAP SUMMARY:
+==19835==     in use at exit: 0 bytes in 0 blocks
+==19835==   total heap usage: 13 allocs, 13 frees, 7,670 bytes allocated
+==19835== 
+==19835== All heap blocks were freed -- no leaks are possible
+==19835== 
+==19835== For counts of detected and suppressed errors, rerun with: -v
+==19835== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==21161== Memcheck, a memory error detector
+==21161== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==21161== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==21161== Command: ./cartman -s
+==21161== 
+==21161== 
+==21161== Process terminating with default action of signal 2 (SIGINT)
+==21161==    at 0x4E3FE6D: __pthread_initialize_minimal (nptl-init.c:433)
+==21161==    by 0x4E3F588: ??? (in /lib/x86_64-linux-gnu/libpthread-2.23.so)
+==21161==    by 0x400044F: ??? (in /lib/x86_64-linux-gnu/ld-2.23.so)
+==21161==    by 0x40106B9: call_init.part.0 (dl-init.c:58)
+==21161==    by 0x4010874: call_init (dl-init.c:104)
+==21161==    by 0x4010874: _dl_init (dl-init.c:87)
+==21161==    by 0x4000C69: ??? (in /lib/x86_64-linux-gnu/ld-2.23.so)
+==21161==    by 0x1: ???
+==21161==    by 0xFFF000C56: ???
+==21161==    by 0xFFF000C60: ???
+==21161== 
+==21161== HEAP SUMMARY:
+==21161==     in use at exit: 0 bytes in 0 blocks
+==21161==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==21161== 
+==21161== All heap blocks were freed -- no leaks are possible
+==21161== 
+==21161== For counts of detected and suppressed errors, rerun with: -v
+==21161== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
