@@ -1,6 +1,0 @@
-scheduler.c: In function ‘stats’:
-scheduler.c:166:3: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
-   printf("t_count is %d\n", t_count);
-   ^
-scheduler.c:166:3: warning: incompatible implicit declaration of built-in function ‘printf’
-scheduler.c:166:3: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
