@@ -17,7 +17,6 @@ thread_t *t_current;
 int t_current_id = 0;
 int cpu_occupied = 0;
 stats_t *all_stats;
-stats_t *t_stats_arr[MAX_THREADS];
 void *t_stats_q;
 int t_count = 0;
 
@@ -44,18 +43,13 @@ stats_by_thread_t *current;
 unsigned int waiting_time_sum = 0;
 unsigned int turnaround_time_sum = 0;
 
-/* Create stats object* */
-stats_t *init_stats(int thread_count) {
-  stats_t *stats = malloc(sizeof(stats_t));
-  stats->tid = thread_count + 1;
-  return stats;
-}
-
 stats_by_thread_t *init_stats_by_thread_t(thread_t *t) {
   stats_by_thread_t *stats_by_t = malloc(sizeof(stats_by_thread_t));
   stats_by_t->stats = malloc(sizeof(stats_t));
+  stats_by_t->stats->tstats = malloc(sizeof(stats_t)); // testing
   stats_by_t->stats->tid = t_count + 1;
-  stats_by_t->t = t;
+  /* stats_by_t->t = t; */
+  stats_by_t->t = malloc(sizeof(thread_t));
   stats_by_t->waiting_time_start = 0;
   stats_by_t->waiting_time_end = 0;
   stats_by_t->turnaround_time_start = 0;
@@ -82,7 +76,6 @@ void scheduler(enum algorithm algorithm, unsigned int quantum) {
     turnaround_time_start[i] = 0;
     turnaround_time_end[i] = 0;
   }
-  t_stats_arr[0] = init_stats(0);
 }
 
 /**
@@ -92,33 +85,40 @@ void scheduler(enum algorithm algorithm, unsigned int quantum) {
  */
 void tick() {}
 
+static int same_t(void *a, void *b) {
+  /* return &(((stats_by_thread_t *)a)->t) == b; */
+  /* printf("tid is %d\n", ((stats_by_thread_t *)a)->tid); */
+  /* printf("%d\n", ((stats_by_thread_t *)a)->stats->tid); */
+  /* printf("%d\n", &(((stats_by_thread_t *)a)->t) == b); */
+  return ((stats_by_thread_t *)a)->t == (thread_t *)b;
+  /* ; */
+  /* return ((outer_t*)outer)->threadname == (thread_t*)inner; */
+}
+
 /**
  * Thread T is ready to be scheduled for the first time.
  */
 void sys_exec(thread_t *t) {
-  /* stats_t *stats = malloc(sizeof(stats_t)); /\* see scheduler.h *\/ */
-  /* if (all_stats->thread_count == 0) { */
-  /*   stats_t *t_stats = init_stats(all_stats->thread_count); */
-  /*   all_stats->tstats = t_stats; */
-  /*   cpu_occupied++; */
-  /* } else */
+  stats_by_thread_t *next;
   if (queue_size(running_q) == 0) {
-    /* t_current = &t; */
-    /* t_current_id = 0; */
-    stats_by_thread_t *next = init_stats_by_thread_t(t);
-    /* update_t_current(t); */
-    /* waiting_time_start[t_current_id] = sim_time(); */
-    /* turnaround_time_start[t_current_id] = sim_time(); */
+    if (queue_size(t_stats_q) == 0) {
+      next = init_stats_by_thread_t(t);
+      queue_enqueue(t_stats_q, next);
+    } else {
+      printf("size of t_stats_q is %d", queue_size(t_stats_q));
+      printf("testing %d\n", queue_find(&t_stats_q, same_t, &t));
+      /* exit(1); */
+    }
     next->turnaround_time_start = sim_time();
-    queue_enqueue(t_stats_q, next);
     queue_enqueue(running_q, next);
     current = next;
     sim_dispatch(t);
   } else {
     /* waiting_time_start[t_count + 1] = sim_time(); */
-    stats_by_thread_t *to_wait = init_stats_by_thread_t(t);
-    to_wait->waiting_time_start = sim_time();
-    queue_enqueue(ready_q, to_wait);
+    next = init_stats_by_thread_t(t);
+    next->waiting_time_start = sim_time();
+    queue_enqueue(ready_q, next);
+    queue_enqueue(t_stats_q, next);
   }
 
   /* Put thread in ready queue if CPU is occupied */
@@ -142,16 +142,15 @@ void sys_exit(thread_t *t) {
   waiting_time_sum += waiting_time;
   turnaround_time_sum += turnaround_time;
 
+  queue_dequeue(running_q);
+  /* Dispatch next Ready next thread */
   if (queue_size(ready_q) > 0) {
     stats_by_thread_t *next = (stats_by_thread_t *)queue_dequeue(ready_q);
     next->waiting_time_end = sim_time() + 1;
-    next->turnaround_time_start = sim_time();
-    current = next;
-    queue_enqueue(running_q, next);
-    sim_dispatch(next->t);
+    sys_exec(next->t);
+    /* sim_dispatch(next->t); */
   } else {
   }
-  queue_dequeue(running_q);
 }
 
 /**
@@ -189,18 +188,26 @@ stats_t *stats() {
   /* Calc means */
   unsigned int mean_wait = waiting_time_sum / t_count;
   unsigned int mean_turnaround = turnaround_time_sum / t_count;
-
-  /* printf("t_count is %d\n", t_count); */
-
-  all_stats = init_stats(t_count);
+  all_stats = malloc(sizeof(stats_t));
   all_stats->thread_count = t_count;
   all_stats->waiting_time = mean_wait;
   all_stats->turnaround_time = mean_turnaround;
   /* printf("turnaround_time is %d\n", mean_turnaround); */
   /* printf("turnaround_time_start[0] is %d\n", turnaround_time_start[1]); */
   /* printf("turnaround_time_end[0] is %d\n", turnaround_time_end[1]); */
-  all_stats->tstats = malloc(sizeof(stats_t) * t_count);
-  all_stats->tstats = ((stats_by_thread_t *)queue_head(t_stats_q))->stats;
+  /* all_stats->tstats = malloc(sizeof(stats_t) * t_count); */
+  all_stats->tstats = malloc(sizeof(stats_t) * all_stats->thread_count);
+
+  /* Fill in tstats */
+  for (int i = 0; i < t_count; i++) {
+    stats_by_thread_t *sbt = queue_dequeue(t_stats_q);
+    int tid = sbt->stats->tid;
+    all_stats->tstats[i].tid = tid;
+    all_stats->tstats[i].waiting_time =
+        sbt->waiting_time_end - sbt->waiting_time_start;
+    all_stats->tstats[i].turnaround_time =
+        sbt->turnaround_time_end - sbt->turnaround_time_start;
+  }
   /* printf("turnaround_time[0] using tstats is is %d\n", */
   /*        all_stats->tstats->turnaround_time); */
   /* printf("wait_time[0] using tstats is is %d\n", */
