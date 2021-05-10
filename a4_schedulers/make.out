@@ -1,16 +1,15 @@
-scheduler.c: In function ‘sys_exec’:
-scheduler.c:108:7: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
-       printf("size of t_stats_q is %d", queue_size(t_stats_q));
-       ^
-scheduler.c:108:7: warning: incompatible implicit declaration of built-in function ‘printf’
-scheduler.c:108:7: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
-scheduler.c:109:53: warning: passing argument 2 of ‘queue_find’ from incompatible pointer type [-Wincompatible-pointer-types]
-       printf("testing %d\n", queue_find(&t_stats_q, same_t, &t));
-                                                     ^
-In file included from scheduler.c:7:0:
-queue.h:81:7: note: expected ‘_Bool (*)(void *, void *)’ but argument is of type ‘int (*)(void *, void *)’
- void *queue_find(void *queue, bool (*equalitor)(void*,void*), void *value);
-       ^
-scheduler.c:109:14: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘void *’ [-Wformat=]
-       printf("testing %d\n", queue_find(&t_stats_q, same_t, &t));
-              ^
+scheduler.c: In function ‘tid_lt’:
+scheduler.c:175:34: error: ‘stats_by_thread_t {aka struct __stats_by_thread_t}’ has no member named ‘tid’
+   return ((stats_by_thread_t *)a)->tid < ((stats_by_thread_t *)b)->tid;
+                                  ^
+scheduler.c:175:66: error: ‘stats_by_thread_t {aka struct __stats_by_thread_t}’ has no member named ‘tid’
+   return ((stats_by_thread_t *)a)->tid < ((stats_by_thread_t *)b)->tid;
+                                                                  ^
+scheduler.c: At top level:
+scheduler.c:101:12: warning: ‘same_t’ defined but not used [-Wunused-function]
+ static int same_t(void *a, void *b) {
+            ^
+scheduler.c: In function ‘tid_lt’:
+scheduler.c:176:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
