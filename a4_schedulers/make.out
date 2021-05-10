@@ -1,15 +1,10 @@
-scheduler.c: In function ‘tid_lt’:
-scheduler.c:175:34: error: ‘stats_by_thread_t {aka struct __stats_by_thread_t}’ has no member named ‘tid’
-   return ((stats_by_thread_t *)a)->tid < ((stats_by_thread_t *)b)->tid;
-                                  ^
-scheduler.c:175:66: error: ‘stats_by_thread_t {aka struct __stats_by_thread_t}’ has no member named ‘tid’
-   return ((stats_by_thread_t *)a)->tid < ((stats_by_thread_t *)b)->tid;
-                                                                  ^
+scheduler.c: In function ‘sys_exit’:
+scheduler.c:122:3: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
+   printf("thread %d spent %d waiting\n", fin->stats->tid,
+   ^
+scheduler.c:122:3: warning: incompatible implicit declaration of built-in function ‘printf’
+scheduler.c:122:3: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
 scheduler.c: At top level:
-scheduler.c:101:12: warning: ‘same_t’ defined but not used [-Wunused-function]
- static int same_t(void *a, void *b) {
+scheduler.c:182:12: warning: ‘tid_lt’ defined but not used [-Wunused-function]
+ static int tid_lt(void *a, void *b) {
             ^
-scheduler.c: In function ‘tid_lt’:
-scheduler.c:176:1: warning: control reaches end of non-void function [-Wreturn-type]
- }
- ^
